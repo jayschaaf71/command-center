@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-11T16:28:10Z",
+  "generated_at": "2026-02-20T23:30:40Z",
   "openclaw": {
     "status": "online",
     "mode": "local",
@@ -16,10 +16,10 @@
     "subagent_model": "anthropic/claude-haiku-4-5-20251001"
   },
   "token_spend": {
-    "recent_sessions": 8,
-    "input_tokens_sum": 17183,
-    "output_tokens_sum": 17877,
-    "total_tokens_sum": 124364,
-    "max_percent_used": 351
+    "recent_sessions": 10,
+    "input_tokens_sum": 1065,
+    "output_tokens_sum": 25235,
+    "total_tokens_sum": 1281754,
+    "max_percent_used": 100
   }
 }
