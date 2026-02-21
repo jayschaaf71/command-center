@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EpicLife OS — Command Center</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--surface:#12121a;--elevated:#1a1a2e;--border:#252540;--primary:#2563EB;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--gold:#c9a227;--purple:#8b5cf6;--orange:#f97316;--text-primary:#f0f0f0;--text-secondary:#94a3b8;--text-muted:#64748b;--glow-primary:rgba(37,99,235,0.15);--glow-success:rgba(16,185,129,0.15);--glow-gold:rgba(201,162,39,0.15);--glow-danger:rgba(239,68,68,0.15)}
+body{background:var(--bg);color:var(--text-primary);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.serif{font-family:'DM Serif Display',serif}.mono{font-family:'JetBrains Mono',monospace}
+input::placeholder,textarea::placeholder{color:var(--text-muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .3s}
+.habit-btn{display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;transition:all .25s ease;border:1px solid var(--border);background:var(--surface);position:relative;overflow:hidden;width:100%}
+.habit-btn:hover{background:var(--elevated);transform:translateY(-1px)}
+.habit-btn.done{background:rgba(16,185,129,0.06);border-color:rgba(16,185,129,0.25)}
+.habit-btn.done .habit-check{background:var(--success);border-color:var(--success)}
+.habit-btn.done .habit-check::after{content:"✓";color:#fff;font-size:11px;font-weight:700}
+.habit-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.habit-btn:not(.done):hover .habit-check{border-color:var(--success)}
+.habit-domain-bar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.priority-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.priority-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s}
+.priority-check.done{background:var(--primary);border-color:var(--primary)}
+.priority-check.done::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
+.priority-input{flex:1;background:var(--elevated);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-family:'DM Sans';font-size:14px;color:var(--text-primary);outline:none}
+.priority-input:focus{border-color:rgba(37,99,235,0.5);box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+.priority-input.done-text{text-decoration:line-through;color:var(--text-muted)}
+.streak-number{font-family:'JetBrains Mono';font-size:72px;font-weight:700;line-height:1}
+.streak-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;opacity:.15;pointer-events:none;filter:blur(40px)}
+@keyframes streakPulse{0%,100%{opacity:.15}50%{opacity:.3}}.streak-glow.pulsing{animation:streakPulse 2s ease-in-out infinite}
+@keyframes dangerPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}50%{box-shadow:0 0 20px 4px rgba(239,68,68,0.15)}}.streak-danger{animation:dangerPulse 1.5s ease-in-out infinite}
+@keyframes warningPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}50%{box-shadow:0 0 20px 4px rgba(245,158,11,0.15)}}.streak-warning{animation:warningPulse 2s ease-in-out infinite}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);transition:all .2s;margin-bottom:6px}
+.task-item:hover{background:var(--elevated)}
+.task-item.task-done{opacity:.5}.task-item.task-done .task-title{text-decoration:line-through;color:var(--text-muted)}
+.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s;margin-top:2px}
+.task-check:hover{border-color:var(--success)}
+.task-check.checked{background:var(--success);border-color:var(--success)}
+.task-check.checked::after{content:"✓";color:#fff;font-size:10px;font-weight:700}
+.task-title{font-size:13px;color:var(--text-primary);line-height:1.4}
+.task-meta{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.task-venture-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.task-priority-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.task-due{font-size:10px;color:var(--text-muted)}.task-source{font-size:10px;color:var(--text-muted);font-style:italic}
+.task-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;opacity:0;transition:opacity .2s}
+.task-item:hover .task-delete{opacity:1}.task-delete:hover{color:var(--danger);background:rgba(239,68,68,0.1)}
+.venture-tab{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;background:transparent;color:var(--text-muted);white-space:nowrap}
+.venture-tab:hover{color:var(--text-secondary);background:var(--elevated)}
+.venture-tab.active{color:var(--text-primary);background:var(--elevated);border-color:var(--border)}
+.quick-add-input{flex:1;background:var(--elevated);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'DM Sans';font-size:13px;color:var(--text-primary);outline:none}
+.quick-add-input:focus{border-color:rgba(37,99,235,0.5)}
+.quick-add-select{background:var(--elevated);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'DM Sans';font-size:12px;color:var(--text-secondary);outline:none;cursor:pointer;-webkit-appearance:none}
+.quick-add-btn{background:var(--primary);border:none;color:#fff;padding:10px 18px;border-radius:10px;font-family:'DM Sans';font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.quick-add-btn:hover{background:#3b82f6;transform:translateY(-1px)}
+.domain-badge{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;min-width:80px}
+.activity-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(37,55,80,0.3)}.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.mode-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:500;letter-spacing:.5px}
+.vision-card{background:linear-gradient(135deg,var(--surface) 0%,rgba(201,162,39,0.04) 100%);border:1px solid rgba(201,162,39,0.15);border-radius:16px;padding:24px 28px}
+.finance-card{background:linear-gradient(135deg,var(--surface) 0%,rgba(37,99,235,0.03) 100%);border:1px solid var(--border);border-radius:16px;padding:24px 28px;position:relative;overflow:hidden}
+.review-card{background:linear-gradient(135deg,var(--surface) 0%,rgba(139,92,246,0.04) 100%);border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:24px}
+.review-textarea{width:100%;background:var(--elevated);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'DM Sans';font-size:13px;color:var(--text-primary);outline:none;resize:vertical;min-height:48px}
+.status-dot{width:6px;height:6px;border-radius:50%}.status-dot.online{background:var(--success);box-shadow:0 0 6px var(--success)}.status-dot.offline{background:var(--danger);box-shadow:0 0 6px var(--danger)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .4s ease-out}
+@keyframes shimmer{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}.shimmer{animation:shimmer 1.5s ease-in-out infinite}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000}
+.modal-content{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;width:90%;max-width:480px}
+.modal-input{width:100%;background:var(--elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'DM Sans';font-size:14px;color:var(--text-primary);outline:none;margin-bottom:12px}
+.modal-input:focus{border-color:rgba(37,99,235,0.5)}
+.modal-select{width:100%;background:var(--elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'DM Sans';font-size:14px;color:var(--text-secondary);outline:none;margin-bottom:12px;-webkit-appearance:none}
+.modal-row{display:flex;gap:10px}.modal-row>*{flex:1}
+.modal-btn{padding:12px 24px;border-radius:10px;font-family:'DM Sans';font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.modal-btn-primary{background:var(--primary);color:#fff}.modal-btn-primary:hover{background:#3b82f6}
+.modal-btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}.modal-btn-ghost:hover{background:var(--elevated)}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr!important}.top-row{grid-template-columns:1fr!important}.domain-row{flex-wrap:wrap}.streak-number{font-size:56px}.quick-add-row{flex-wrap:wrap}.quick-add-select{width:100%}}
+@media(max-width:600px){.habits-grid{grid-template-columns:1fr!important}.streak-number{font-size:48px}body{font-size:14px}.card{padding:18px}}
+
+/* ═══ MARCUS CHAT WIDGET ═══ */
+#marcus-fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1a1a2e 0%,#252540 100%);border:1px solid rgba(201,162,39,0.25);box-shadow:0 4px 24px rgba(0,0,0,0.4),0 0 0 1px rgba(201,162,39,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:900;transition:all .3s cubic-bezier(.4,0,.2,1)}
+#marcus-fab:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 32px rgba(0,0,0,0.5),0 0 20px rgba(201,162,39,0.15);border-color:rgba(201,162,39,0.4)}
+#marcus-fab.has-panel{background:rgba(201,162,39,0.15);border-color:rgba(201,162,39,0.3)}
+#marcus-fab svg{width:26px;height:26px;color:var(--gold);transition:transform .3s}
+#marcus-fab:hover svg{transform:scale(1.1)}
+.marcus-unread{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:var(--primary);border:2px solid var(--bg);font-size:0}
+
+#marcus-panel{position:fixed;bottom:92px;right:24px;width:400px;height:min(600px,calc(100vh - 120px));background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:0 12px 48px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.03);z-index:901;display:flex;flex-direction:column;overflow:hidden;transform:translateY(16px) scale(0.96);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(.4,0,.2,1)}
+#marcus-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
+
+.mp-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(201,162,39,0.04) 0%,transparent 100%);flex-shrink:0}
+.mp-header-left{display:flex;align-items:center;gap:10px}
+.mp-avatar{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(201,162,39,0.2),rgba(37,99,235,0.15));display:flex;align-items:center;justify-content:center;font-size:16px}
+.mp-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text-primary)}
+.mp-status{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px}
+.mp-status.online{color:var(--success)}.mp-status.offline{color:var(--danger)}.mp-status.connecting{color:var(--warning)}
+.mp-close{width:28px;height:28px;border-radius:8px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mp-close:hover{background:var(--elevated);color:var(--text-primary)}
+
+.mp-messages{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.mp-messages::-webkit-scrollbar{width:4px}.mp-messages::-webkit-scrollbar-track{background:transparent}.mp-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+.mp-msg{display:flex;gap:8px;max-width:92%}
+.mp-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.mp-msg.assistant{align-self:flex-start}
+.mp-bubble{padding:10px 14px;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
+.mp-msg.user .mp-bubble{background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.mp-msg.assistant .mp-bubble{background:var(--elevated);color:var(--text-secondary);border-bottom-left-radius:4px;border:1px solid var(--border)}
+.mp-bubble code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,0.25);padding:1px 5px;border-radius:4px}
+.mp-bubble pre{background:rgba(0,0,0,0.3);padding:10px 12px;border-radius:8px;overflow-x:auto;margin:6px 0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5}
+.mp-bubble pre code{background:none;padding:0}
+.mp-bubble strong{color:var(--text-primary);font-weight:600}
+.mp-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-muted);margin-top:4px;text-align:right}
+.mp-msg.assistant .mp-time{text-align:left}
+
+.mp-typing{display:flex;gap:4px;padding:4px 0 4px 4px}.mp-typing span{width:5px;height:5px;border-radius:50%;background:var(--text-muted);animation:mpBounce .6s ease-in-out infinite}
+.mp-typing span:nth-child(2){animation-delay:.15s}.mp-typing span:nth-child(3){animation-delay:.3s}
+@keyframes mpBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+.mp-stream{align-self:flex-start;max-width:92%;display:flex;gap:8px}
+.mp-stream .mp-bubble{background:var(--elevated);color:var(--text-secondary);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px}
+
+.mp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:8px;color:var(--text-muted)}
+.mp-empty-icon{font-size:28px;opacity:.5}
+.mp-empty-text{font-size:12px}
+
+.mp-input-area{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.mp-input{flex:1;background:var(--elevated);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-primary);outline:none;resize:none;max-height:120px;line-height:1.4}
+.mp-input:focus{border-color:rgba(201,162,39,0.4)}
+.mp-input::placeholder{color:var(--text-muted)}
+.mp-send{width:40px;height:40px;border-radius:12px;border:none;background:var(--gold);color:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;align-self:flex-end}
+.mp-send:hover{background:#d4a82e;transform:scale(1.05)}
+.mp-send:disabled{opacity:.3;cursor:default;transform:none}
+.mp-send svg{width:18px;height:18px}
+
+.mp-error{padding:8px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;font-size:11px;color:var(--danger);margin:0 16px 8px}
+
+@media(max-width:500px){
+  #marcus-panel{bottom:0;right:0;left:0;width:100%;height:100vh;border-radius:0}
+  #marcus-fab{bottom:16px;right:16px;width:50px;height:50px;border-radius:14px}
+}
+
+</style>
+</head>
+<body>
+<div id="app"><div style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div class="serif shimmer" style="font-size:20px;color:var(--gold);letter-spacing:2px">LOADING EPICLIFE OS...</div></div></div>
+<div id="modal-root"></div>
+
+<!-- MARCUS CHAT WIDGET -->
+<div id="marcus-chat-root">
+  <button id="marcus-fab" onclick="marcusChat.toggle()" title="Chat with Marcus">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+  <div id="marcus-panel">
+    <div class="mp-header">
+      <div class="mp-header-left">
+        <div class="mp-avatar">🤖</div>
+        <div>
+          <div class="mp-title">Marcus</div>
+          <div id="mp-status" class="mp-status offline">DISCONNECTED</div>
+        </div>
+      </div>
+      <button class="mp-close" onclick="marcusChat.toggle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="mp-messages" id="mp-messages"></div>
+    <div class="mp-input-area">
+      <textarea class="mp-input" id="mp-input" placeholder="Message Marcus..." rows="1" onkeydown="marcusChat.onKey(event)" oninput="marcusChat.autoGrow(this)"></textarea>
+      <button class="mp-send" id="mp-send" onclick="marcusChat.send()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+let db=null;try{if(typeof firebase!=='undefined'){firebase.initializeApp({apiKey:"AIzaSyBcTbb7Rs78MWdcpUmEbMUpXjtc2LR9yro",authDomain:"epiclife-os.firebaseapp.com",projectId:"epiclife-os",storageBucket:"epiclife-os.firebasestorage.app",messagingSenderId:"1066316828565",appId:"1:1066316828565:web:c13ee65708fc19e9db09c"});db=firebase.firestore();}}catch(e){}
+const useFirebase=db!==null,dk=()=>new Date().toISOString().slice(0,10);
+async function loadData(c,d){if(useFirebase){try{const doc=await db.collection(c).doc(d).get();return doc.exists?doc.data():null;}catch(e){}}try{const r=localStorage.getItem(`${c}:${d}`);return r?JSON.parse(r):null;}catch{return null;}}
+async function saveData(c,d,data){if(useFirebase){try{await db.collection(c).doc(d).set(data,{merge:true});}catch(e){}}try{localStorage.setItem(`${c}:${d}`,JSON.stringify(data));}catch{}}
+
+const AudioCtx=window.AudioContext||window.webkitAudioContext;let audioCtx=null;
+function getAudio(){if(!audioCtx)audioCtx=new AudioCtx();return audioCtx;}
+function playNote(f,dur=.12,type='sine',vol=.15){try{const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+dur);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime);o.stop(ctx.currentTime+dur);}catch(e){}}
+function playHabitComplete(){playNote(523.25,.1);setTimeout(()=>playNote(659.25,.15),80);}
+function playAllComplete(){playNote(523.25,.1);setTimeout(()=>playNote(659.25,.1),80);setTimeout(()=>playNote(783.99,.2),160);}
+function playTaskComplete(){playNote(440,.08);setTimeout(()=>playNote(554.37,.12),60);}
+function fireHabitConfetti(){confetti({particleCount:25,spread:40,origin:{y:.7},colors:['#10b981','#34d399'],scalar:.8});}
+function fireAllHabitsConfetti(){const e=Date.now()+1500;(function f(){confetti({particleCount:4,angle:60,spread:55,origin:{x:0},colors:['#c9a227','#fbbf24','#10b981']});confetti({particleCount:4,angle:120,spread:55,origin:{x:1},colors:['#2563EB','#60a5fa','#c9a227']});if(Date.now()<e)requestAnimationFrame(f);})();}
+function fireTaskConfetti(){confetti({particleCount:15,spread:30,origin:{y:.65},colors:['#2563EB','#60a5fa'],scalar:.7});}
+
+const ACCTS={checking:[{n:"USAA Checking •2963",b:22635.82},{n:"USAA Checking •4657",b:1187.94}],savings:[{n:"USAA Savings •2955",b:1801.23}],invest:[{n:"Rollover IRA •100",b:286096.39},{n:"529 Plan •715",b:4232.48},{n:"DAF •035",b:344.68}],cc:[{n:"Chase Southwest •6579",b:-43202.49},{n:"Chase United •9869",b:-39293.13},{n:"Delta Reserve •2006",b:-38320.66},{n:"USAA Card •2445",b:-11123.63},{n:"Signature Visa •7354",b:-8968.28},{n:"USAA Visa •6297",b:-5569.59}],loans:[{n:"Auto Loan •7502",b:-76693.62}],re:[{n:"House 1",val:1800000,owe:900000},{n:"House 2",val:850000,owe:650000}]};
+const sum=a=>a.reduce((s,x)=>s+(x.b||0),0),liquid=sum(ACCTS.checking)+sum(ACCTS.savings),invest=sum(ACCTS.invest),ccDebt=sum(ACCTS.cc),loanDebt=sum(ACCTS.loans),reVal=ACCTS.re.reduce((s,a)=>s+a.val,0),reOwe=ACCTS.re.reduce((s,a)=>s+a.owe,0),reEq=reVal-reOwe,totalAssets=liquid+invest+reVal,totalDebts=ccDebt+loanDebt-reOwe,netWorth=totalAssets+totalDebts;
+const fmtK=n=>{const a=Math.abs(n),s=n<0?"-":"";return a>=1e6?s+"$"+(a/1e6).toFixed(2)+"M":a>=1e3?s+"$"+(a/1e3).toFixed(1)+"K":s+"$"+a.toFixed(0);};
+const fmtD=n=>(n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const HABITS=[{id:"bw1",label:"6 AM Breathwork",icon:"🫁",domain:"spiritual"},{id:"acim",label:"ACIM Reading",icon:"📖",domain:"spiritual"},{id:"top3",label:"Set Top 3 Priorities",icon:"🎯",domain:"professional"},{id:"cal",label:"Calendar Review",icon:"📅",domain:"professional"},{id:"bw2",label:"11 AM Breathwork",icon:"🫁",domain:"spiritual"},{id:"gym",label:"Exercise",icon:"💪",domain:"health"},{id:"nut",label:"Nutrition Tracking",icon:"🥗",domain:"health"},{id:"bw3",label:"5:30 PM Breathwork",icon:"🫁",domain:"spiritual"},{id:"swt",label:"No Sweets After 8",icon:"🚫",domain:"health"},{id:"spr",label:"Evening Reading",icon:"📚",domain:"spiritual"}];
+const DC={spiritual:"#8b5cf6",health:"#10b981",professional:"#2563EB",family:"#ef4444",financial:"#f59e0b",personal:"#f97316"};
+const DOMAINS=[{name:"Spiritual",icon:"🙏",color:"#8b5cf6",hids:["bw1","acim","bw2","bw3","spr"]},{name:"Health",icon:"💪",color:"#10b981",hids:["gym","swt","nut"]},{name:"Professional",icon:"⚔️",color:"#2563EB",hids:["top3","cal"]},{name:"Family",icon:"❤️",color:"#ef4444",hids:[]}];
+const VC={SkyHawk:{label:"SkyHawk",color:"#2563EB",bg:"rgba(37,99,235,0.1)"},SymAssist:{label:"SymAssist",color:"#8b5cf6",bg:"rgba(139,92,246,0.1)"},EpicLife:{label:"EpicLife",color:"#ef4444",bg:"rgba(239,68,68,0.1)"},BlackKnight:{label:"BlackKnight",color:"#c9a227",bg:"rgba(201,162,39,0.1)"},TrueNorth:{label:"True North",color:"#60a5fa",bg:"rgba(96,165,250,0.1)"},STOIC:{label:"STOIC",color:"#94a3b8",bg:"rgba(148,163,184,0.1)"},Personal:{label:"Personal",color:"#f97316",bg:"rgba(249,115,22,0.1)"}};
+const VK=Object.keys(VC);
+const VISION=["I am a disciplined executor who focuses on needle-moving activities and delegates the rest without fear.","I show up consistently for my health, my family, and my businesses — every single day.","I build world-class AI-powered companies that create real value for real people.","I am present with my family, generous with my time, and intentional with my energy.","I protect my mornings, honor my commitments, and finish what I start.","I am the man my daughters look up to and the husband Rachel deserves.","I lead with integrity, execute with precision, and inspire through action."];
+const MARCUS=[{time:"6:00 AM",title:"Morning Briefing Delivered",detail:"3 priorities suggested, 2 calendar conflicts flagged",status:"success"},{time:"7:15 AM",title:"SkyHawk Pipeline Synced",detail:"Salesforce: 50 deals, $1.5M+ pipeline",status:"success"},{time:"8:30 AM",title:"Follow-up Emails Drafted",detail:"3 AWS re:Invent leads — awaiting review",status:"warning"},{time:"9:00 AM",title:"YNAB Financial Sync",detail:"All accounts synced",status:"success"},{time:"11:00 AM",title:"SymAssist Task Created",detail:"Review Jeremy's wireframes — due tomorrow",status:"success"}];
+const SYS=[{n:"Marcus AI",s:true},{n:"Telegram",s:true},{n:"Salesforce",s:true},{n:"YNAB",s:true},{n:"Google Calendar",s:true},{n:"OpenClaw",s:true}];
+
+function getMode(){const h=new Date().getHours();if(h>=5&&h<12)return"morning";if(h>=12&&h<17)return"afternoon";return"evening";}
+function getMC(m){return{morning:{label:"MORNING",icon:"☀️",greeting:"Good morning",color:"#f59e0b",bg:"rgba(245,158,11,0.06)",border:"rgba(245,158,11,0.15)"},afternoon:{label:"AFTERNOON",icon:"⚡",greeting:"Keep pushing",color:"#2563EB",bg:"rgba(37,99,235,0.06)",border:"rgba(37,99,235,0.15)"},evening:{label:"EVENING",icon:"🌙",greeting:"Time to reflect",color:"#8b5cf6",bg:"rgba(139,92,246,0.06)",border:"rgba(139,92,246,0.15)"}}[m];}
+function hoursLeft(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);return(m-n)/3600000;}
+
+let state={habits:{},priorities:["","",""],priorityDone:[false,false,false],streak:0,streakBest:0,shields:0,tasks:[],taskFilter:"all",taskShowDone:false,activityOpen:false,financeOpen:false,mode:getMode(),ready:false,modalOpen:false};
+
+// ═══ TASK SYSTEM ════════════════════════════════════════════
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+async function loadTasks(){const d=await loadData("tasks","all");state.tasks=(d&&d.items)||[];}
+async function saveTasks(){await saveData("tasks","all",{items:state.tasks});}
+async function addTask(title,venture,priority,due,source){
+  state.tasks.unshift({id:genId(),title,venture:venture||"Personal",priority:priority||"medium",status:"todo",due:due||null,source:source||"user",created:new Date().toISOString(),completed:null});
+  await saveTasks();render();
+}
+async function toggleTask(id){
+  const t=state.tasks.find(x=>x.id===id);if(!t)return;
+  if(t.status==="done"){t.status="todo";t.completed=null;}else{t.status="done";t.completed=new Date().toISOString();fireTaskConfetti();playTaskComplete();if(navigator.vibrate)navigator.vibrate(30);}
+  await saveTasks();render();
+}
+async function deleteTask(id){state.tasks=state.tasks.filter(t=>t.id!==id);await saveTasks();render();}
+function getFilteredTasks(){
+  let t=state.tasks;if(state.taskFilter!=="all")t=t.filter(x=>x.venture===state.taskFilter);
+  if(!state.taskShowDone)t=t.filter(x=>x.status!=="done");
+  const p={urgent:0,high:1,medium:2,low:3};
+  return t.sort((a,b)=>{if(a.status==="done"&&b.status!=="done")return 1;if(a.status!=="done"&&b.status==="done")return -1;return(p[a.priority]||2)-(p[b.priority]||2);});
+}
+function taskStats(){
+  const a=state.tasks.filter(t=>t.status!=="done"),d=state.tasks.filter(t=>t.status==="done"&&t.completed&&t.completed.startsWith(dk())),bv={};
+  a.forEach(t=>{bv[t.venture]=(bv[t.venture]||0)+1;});return{active:a.length,doneToday:d.length,byVenture:bv};
+}
+function quickAddTask(){const i=document.getElementById('qa-in'),v=document.getElementById('qa-v'),p=document.getElementById('qa-p');if(!i||!i.value.trim())return;addTask(i.value.trim(),v.value,p.value);i.value='';i.focus();}
+function qaKey(e){if(e.key==='Enter')quickAddTask();}
+function openModal(){state.modalOpen=true;renderModal();}
+function closeModal(){state.modalOpen=false;document.getElementById('modal-root').innerHTML='';}
+function renderModal(){
+  document.getElementById('modal-root').innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-content">
+    <div class="serif" style="font-size:20px;margin-bottom:20px;">Add Action Item</div>
+    <input id="m-title" class="modal-input" placeholder="What needs to get done?" autofocus>
+    <div class="modal-row" style="margin-bottom:12px"><select id="m-venture" class="modal-select">${VK.map(k=>`<option value="${k}">${VC[k].label}</option>`).join('')}</select><select id="m-priority" class="modal-select"><option value="urgent">🔴 Urgent</option><option value="high">🟠 High</option><option value="medium" selected>🟡 Medium</option><option value="low">🟢 Low</option></select></div>
+    <input id="m-due" class="modal-input" type="date" style="color:var(--text-secondary)">
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px"><button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cancel</button><button class="modal-btn modal-btn-primary" onclick="submitModal()">Add Task</button></div>
+  </div></div>`;
+  setTimeout(()=>document.getElementById('m-title')?.focus(),100);
+}
+function submitModal(){const t=document.getElementById('m-title')?.value?.trim();if(!t)return;addTask(t,document.getElementById('m-venture').value,document.getElementById('m-priority').value,document.getElementById('m-due').value||null);closeModal();}
+
+async function calcStreak(){const d=await loadData("streak","current");if(d){state.streak=d.current||0;state.streakBest=d.best||0;state.shields=d.shields||0;}}
+async function checkStreak(allDone){const today=dk(),cd=await loadData("streak_completions",today);if(allDone&&!(cd&&cd.completed)){state.streak+=1;if(state.streak>state.streakBest)state.streakBest=state.streak;if(state.streak%7===0&&state.shields<3)state.shields+=1;await saveData("streak_completions",today,{completed:true});await saveData("streak","current",{current:state.streak,best:state.streakBest,shields:state.shields,lastComplete:today});fireAllHabitsConfetti();playAllComplete();return true;}return false;}
+
+function render(){
+  const{habits,priorities,priorityDone,streak,streakBest,shields,taskFilter,taskShowDone,activityOpen,financeOpen,mode}=state;
+  const mc=getMC(mode),doy=Math.floor((Date.now()-new Date(2026,0,1))/86400000)+1,pct=Math.round((doy/365)*100);
+  const done=Object.values(habits).filter(Boolean).length,total=HABITS.length,allDone=done===total;
+  const hl=hoursLeft(),sd=!allDone&&hl<=2?"danger":!allDone&&hl<=6?"warning":"safe";
+  const ds=new Date().toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+  const vi=doy%VISION.length;
+  const sc=allDone?"var(--success)":sd==="danger"?"var(--danger)":sd==="warning"?"var(--warning)":"var(--gold)";
+  const sg=allDone?"var(--glow-success)":sd==="danger"?"var(--glow-danger)":"var(--glow-gold)";
+  const skc=sd==="danger"?"streak-danger":sd==="warning"?"streak-warning":"";
+  const ft=getFilteredTasks(),ts=taskStats();
+  const PC={urgent:"var(--danger)",high:"var(--orange)",medium:"var(--warning)",low:"var(--success)"};
+
+  document.getElementById('app').innerHTML=`<div class="fade-in" style="max-width:1100px;margin:0 auto;padding:24px 20px 60px">
+
+  <!-- HEADER -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:14px"><div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--gold));display:flex;align-items:center;justify-content:center;font-size:20px">⚡</div><div><div class="serif" style="font-size:22px">EpicLife OS</div><div style="font-size:12px;color:var(--text-muted)">${ds}</div></div></div>
+    <div style="display:flex;align-items:center;gap:16px"><div class="mode-pill" style="background:${mc.bg};border:1px solid ${mc.border};color:${mc.color}"><span>${mc.icon}</span><span class="mono" style="font-size:11px;letter-spacing:1px">${mc.label}</span></div><div class="mono" style="font-size:12px;color:var(--text-muted)">Day ${doy} · ${pct}%</div></div>
+  </div>
+
+  <!-- STREAK + VISION -->
+  <div class="top-row" style="display:grid;grid-template-columns:260px 1fr;gap:16px;margin-bottom:16px">
+    <div class="card ${skc}" style="text-align:center;padding:24px 16px;border-color:${allDone?'rgba(16,185,129,0.25)':sd!=='safe'?(sd==='danger'?'rgba(239,68,68,0.25)':'rgba(245,158,11,0.25)'):'var(--border)'}">
+      <div style="padding:8px 0;position:relative"><div class="streak-glow ${allDone?'pulsing':''}" style="background:${sg}"></div><div class="streak-number" style="color:${sc};position:relative">${streak}</div><div style="font-size:14px;color:var(--text-secondary);margin-top:4px;letter-spacing:1px;text-transform:uppercase">${allDone?'🔥 Day Protected!':'Day Streak'}</div></div>
+      <div style="display:flex;justify-content:center;gap:14px;margin-top:8px;padding-top:10px;border-top:1px solid var(--border)">
+        <div style="text-align:center"><div class="mono" style="font-size:16px;font-weight:600">${done}/${total}</div><div style="font-size:9px;color:var(--text-muted);margin-top:2px">HABITS</div></div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center"><div class="mono" style="font-size:16px;font-weight:600">${streakBest}</div><div style="font-size:9px;color:var(--text-muted);margin-top:2px">BEST</div></div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center"><div class="mono" style="font-size:16px;font-weight:600">${shields}🛡️</div><div style="font-size:9px;color:var(--text-muted);margin-top:2px">SHIELDS</div></div>
+      </div>
+      ${!allDone&&hl<=6?`<div class="mono" style="font-size:10px;color:${sd==='danger'?'var(--danger)':'var(--warning)'};margin-top:10px">⚠️ ${Math.floor(hl)}h ${Math.round((hl%1)*60)}m left — ${total-done} habits</div>`:''}
+    </div>
+    <div class="vision-card">
+      <div class="serif" style="font-size:26px;color:var(--gold);margin-bottom:4px">${mc.greeting}, Jason.</div>
+      <div style="font-size:14px;color:var(--text-secondary);line-height:1.6;font-style:italic;margin-top:12px;padding-left:16px;border-left:3px solid rgba(201,162,39,0.3)">"${VISION[vi]}"</div>
+      <div class="domain-row" style="display:flex;gap:8px;margin-top:16px">
+        ${DOMAINS.map(d=>{const dd=d.hids.filter(h=>habits[h]).length,tt=d.hids.length,pp=tt>0?Math.round((dd/tt)*100):0;return`<div class="domain-badge" style="flex:1;border-top:3px solid ${d.color}"><span style="font-size:20px">${d.icon}</span><span style="font-size:10px;font-weight:600;color:${d.color}">${d.name}</span>${tt>0?`<div style="width:100%;height:3px;background:var(--elevated);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pp}%;background:${d.color};border-radius:2px;transition:width .3s"></div></div><span class="mono" style="font-size:10px;color:${pp===100?'var(--success)':'var(--text-muted)'};">${dd}/${tt}</span>`:'<span class="mono" style="font-size:10px;color:var(--text-muted)">—</span>'}</div>`;}).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- HABITS + TOP 3 -->
+  <div class="main-grid" style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="serif" style="font-size:17px">Daily Habits</div><div style="display:flex;align-items:center;gap:10px"><div style="height:5px;width:100px;background:var(--elevated);border-radius:3px;overflow:hidden"><div style="height:100%;width:${(done/total)*100}%;background:${allDone?'var(--gold)':'var(--success)'};border-radius:3px;transition:width .3s"></div></div><span class="mono" style="font-size:13px;font-weight:600;color:${allDone?'var(--gold)':'var(--success)'}">${done}/${total}</span></div></div>
+      <div class="habits-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        ${HABITS.map(h=>`<button class="habit-btn ${habits[h.id]?'done':''}" onclick="toggleHabit('${h.id}')"><div class="habit-domain-bar" style="background:${DC[h.domain]}"></div><div class="habit-check"></div><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:${habits[h.id]?500:400};color:${habits[h.id]?'var(--success)':'var(--text-primary)'};text-decoration:${habits[h.id]?'line-through':'none'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h.label}</div></div><span style="font-size:15px;flex-shrink:0">${h.icon}</span></button>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="serif" style="font-size:17px;margin-bottom:14px">Today's Top 3</div>
+      ${[0,1,2].map(i=>`<div class="priority-row"><div class="priority-check ${priorityDone[i]?'done':''}" onclick="togglePriority(${i})"></div><input type="text" class="priority-input ${priorityDone[i]?'done-text':''}" value="${(priorities[i]||'').replace(/"/g,'&quot;')}" onchange="updatePriority(${i},this.value)" placeholder="Priority ${i+1}..."></div>`).join('')}
+    </div>
+  </div>
+
+  <!-- ACTION ITEMS -->
+  <div class="card" style="margin-bottom:16px;border-color:rgba(37,99,235,0.15)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:12px"><div class="serif" style="font-size:17px">Action Items</div><div class="mono" style="font-size:12px;color:var(--text-muted)">${ts.active} active · ${ts.doneToday} done today</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;color:var(--text-muted)"><input type="checkbox" ${taskShowDone?'checked':''} onchange="state.taskShowDone=this.checked;render()" style="accent-color:var(--primary)"> Done</label>
+        <button onclick="openModal()" style="background:var(--primary);border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center" title="Add task (Cmd+K)">+</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+      <input id="qa-in" class="quick-add-input" placeholder="Add action item... (Enter to add)" onkeydown="qaKey(event)">
+      <select id="qa-v" class="quick-add-select">${VK.map(k=>`<option value="${k}">${VC[k].label}</option>`).join('')}</select>
+      <select id="qa-p" class="quick-add-select"><option value="high">High</option><option value="medium" selected>Med</option><option value="low">Low</option></select>
+      <button class="quick-add-btn" onclick="quickAddTask()">Add</button>
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px">
+      <div class="venture-tab ${taskFilter==='all'?'active':''}" onclick="state.taskFilter='all';render()">All (${state.tasks.filter(t=>t.status!=='done').length})</div>
+      ${VK.map(k=>{const c=state.tasks.filter(t=>t.venture===k&&t.status!=='done').length;return c>0?`<div class="venture-tab ${taskFilter===k?'active':''}" onclick="state.taskFilter='${k}';render()" style="${taskFilter===k?'border-color:'+VC[k].color+';color:'+VC[k].color:''}">${VC[k].label} (${c})</div>`:'';}).join('')}
+    </div>
+    <div style="max-height:400px;overflow-y:auto">
+      ${ft.length===0?`<div style="text-align:center;padding:32px;color:var(--text-muted)"><div style="font-size:24px;margin-bottom:8px">✅</div><div style="font-size:13px">${taskFilter==='all'?'No action items yet. Add one above.':'No items for '+VC[taskFilter]?.label}</div></div>`:ft.map(t=>{const vc=VC[t.venture]||VC.Personal,od=t.due&&t.due<dk()&&t.status!=='done';return`<div class="task-item ${t.status==='done'?'task-done':''}"><div class="task-check ${t.status==='done'?'checked':''}" onclick="toggleTask('${t.id}')"></div><div style="flex:1;min-width:0"><div class="task-title">${t.title}</div><div class="task-meta"><div class="task-venture-badge" style="background:${vc.bg};color:${vc.color}"><div style="width:6px;height:6px;border-radius:50%;background:${vc.color}"></div>${vc.label}</div><div class="task-priority-dot" style="background:${PC[t.priority]}"></div>${t.due?`<div class="task-due" style="${od?'color:var(--danger);font-weight:600':''}">📅 ${t.due}</div>`:''}${t.source!=='user'?`<div class="task-source">via ${t.source}</div>`:''}</div></div><button class="task-delete" onclick="event.stopPropagation();deleteTask('${t.id}')" title="Delete">✕</button></div>`;}).join('')}
+    </div>
+    ${Object.keys(ts.byVenture).length>0?`<div style="display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap">${Object.entries(ts.byVenture).sort((a,b)=>b[1]-a[1]).map(([v,c])=>{const vc=VC[v]||VC.Personal;return`<div class="mono" style="font-size:10px;color:${vc.color};background:${vc.bg};padding:3px 10px;border-radius:6px">${vc.label}: ${c}</div>`;}).join('')}</div>`:''}
+  </div>
+
+  <!-- MARCUS + FINANCE -->
+  <div class="main-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card" style="border-color:rgba(37,99,235,0.15)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;cursor:pointer" onclick="toggleActivity()"><div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:8px;background:rgba(37,99,235,0.12);display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div><div><div class="serif" style="font-size:15px">Marcus Activity</div><div class="mono" style="font-size:10px;color:var(--text-muted)">${MARCUS.length} actions today</div></div></div><span style="color:var(--text-muted);font-size:14px">${activityOpen?'▴':'▾'}</span></div>
+      ${activityOpen?MARCUS.map(a=>`<div class="activity-item"><div class="activity-dot" style="background:${a.status==='success'?'var(--success)':'var(--warning)'};box-shadow:0 0 6px ${a.status==='success'?'var(--success)':'var(--warning)'}"></div><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="font-size:12px;font-weight:500">${a.title}</span><span class="mono" style="font-size:9px;color:var(--text-muted)">${a.time}</span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px">${a.detail}</div></div></div>`).join(''):`<div style="display:flex;gap:6px;flex-wrap:wrap">${MARCUS.slice(0,2).map(a=>`<div style="flex:1;padding:8px 12px;background:var(--elevated);border-radius:8px;font-size:11px;color:var(--text-secondary)"><span style="color:${a.status==='success'?'var(--success)':'var(--warning)'}">●</span> ${a.title}</div>`).join('')}</div>`}
+    </div>
+    <div class="finance-card">
+      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle at top right,rgba(37,99,235,0.04),transparent 70%);pointer-events:none"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;cursor:pointer" onclick="toggleFinance()"><div><div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;margin-bottom:3px">NET WORTH</div><div class="mono" style="font-size:28px;font-weight:700">${fmtD(netWorth)}</div></div><div style="text-align:right"><div class="mono" style="font-size:9px;color:var(--text-muted)">YNAB · Feb 12</div><span style="color:var(--text-muted);font-size:14px">${financeOpen?'▴':'▾'}</span></div></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">${[["Assets",fmtK(totalAssets),"var(--success)"],["Debts",fmtK(Math.abs(totalDebts)),"var(--danger)"],["Liquid",fmtK(liquid),"var(--primary)"],["RE Equity",fmtK(reEq),"var(--gold)"]].map(([l,v,c])=>`<div><div style="font-size:9px;color:var(--text-muted)">${l}</div><div class="mono" style="font-size:13px;font-weight:500;color:${c}">${v}</div></div>`).join('')}</div>
+      ${financeOpen?`<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)"><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="font-size:10px;font-weight:600;color:var(--success);letter-spacing:1px;margin-bottom:8px">ASSETS</div>${[...ACCTS.checking,...ACCTS.savings,...ACCTS.invest].map(a=>`<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span class="mono" style="font-size:9px;color:var(--text-muted)">${a.n}</span><span class="mono" style="font-size:9px;color:var(--success)">${fmtD(a.b)}</span></div>`).join('')}</div><div><div style="font-size:10px;font-weight:600;color:var(--danger);letter-spacing:1px;margin-bottom:8px">DEBTS</div>${ACCTS.cc.map(a=>`<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span class="mono" style="font-size:9px;color:var(--text-muted)">${a.n}</span><span class="mono" style="font-size:9px;color:var(--danger)">${fmtD(a.b)}</span></div>`).join('')}<div style="display:flex;justify-content:space-between;margin-top:4px;padding-top:4px;border-top:1px solid var(--border)"><span class="mono" style="font-size:9px;color:var(--text-muted)">${ACCTS.loans[0].n}</span><span class="mono" style="font-size:9px;color:var(--danger)">${fmtD(ACCTS.loans[0].b)}</span></div></div></div></div>`:''}
+    </div>
+  </div>
+
+  ${mode==='evening'?`<div class="review-card" style="margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-size:18px">🌙</span><div class="serif" style="font-size:17px;color:var(--purple)">Evening Review</div></div><div style="display:grid;gap:12px"><div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">What went well today?</div><textarea class="review-textarea" placeholder="Today's wins..." onchange="saveReview('wins',this.value)"></textarea></div><div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">What would I do differently?</div><textarea class="review-textarea" placeholder="Lessons learned..." onchange="saveReview('lessons',this.value)"></textarea></div><div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">What am I grateful for?</div><textarea class="review-textarea" placeholder="Gratitude..." onchange="saveReview('gratitude',this.value)"></textarea></div></div><div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(139,92,246,0.15)"><div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:8px">🎁 Tomorrow's Gift — Set Tomorrow's Top 3</div>${[0,1,2].map(i=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div class="mono" style="font-size:11px;color:var(--purple);width:18px">${i+1}.</div><input type="text" class="priority-input" placeholder="Tomorrow's priority ${i+1}..." style="border-color:rgba(139,92,246,0.2)" onchange="saveTomorrowPriority(${i},this.value)"></div>`).join('')}</div></div>`:''}
+
+  <div style="display:flex;justify-content:center;gap:20px;padding:16px 0;border-top:1px solid var(--border);flex-wrap:wrap;margin-top:8px">
+    ${SYS.map(s=>`<div style="display:flex;align-items:center;gap:6px"><div class="status-dot ${s.s?'online':'offline'}"></div><span class="mono" style="font-size:10px;color:var(--text-muted)">${s.n}</span></div>`).join('')}
+  </div>
+  </div>`;
+}
+
+async function toggleHabit(id){const w=state.habits[id];state.habits[id]=!w;await saveData("habits",dk(),state.habits);const d=Object.values(state.habits).filter(Boolean).length;if(!w){if(d===HABITS.length){await checkStreak(true);}else{fireHabitConfetti();playHabitComplete();if(navigator.vibrate)navigator.vibrate(50);}}render();}
+function togglePriority(i){state.priorityDone[i]=!state.priorityDone[i];saveData("priorities",dk(),{items:state.priorities,done:state.priorityDone});if(state.priorityDone[i]){confetti({particleCount:20,spread:30,origin:{y:.6},colors:['#2563EB','#60a5fa']});playNote(523.25,.1);}render();}
+function updatePriority(i,v){state.priorities[i]=v;saveData("priorities",dk(),{items:state.priorities,done:state.priorityDone});}
+function toggleActivity(){state.activityOpen=!state.activityOpen;render();}
+function toggleFinance(){state.financeOpen=!state.financeOpen;render();}
+async function saveReview(f,v){const e=await loadData("reviews",dk())||{};e[f]=v;await saveData("reviews",dk(),e);}
+async function saveTomorrowPriority(i,v){const t=new Date();t.setDate(t.getDate()+1);const k=t.toISOString().slice(0,10),e=await loadData("priorities",k)||{items:["","",""],done:[false,false,false]};e.items[i]=v;await saveData("priorities",k,e);}
+
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openModal();}if(e.key==='Escape'&&state.modalOpen)closeModal();});
+setInterval(()=>{const m=getMode();if(m!==state.mode){state.mode=m;render();}},60000);
+
+async function init(){const today=dk(),[hd,pd]=await Promise.all([loadData("habits",today),loadData("priorities",today)]);state.habits=hd||{};state.priorities=(pd&&pd.items)||["","",""];state.priorityDone=(pd&&pd.done)||[false,false,false];await calcStreak();await loadTasks();state.ready=true;render();}
+init();
+</script>
+<script>
+
+/* ═══ MARCUS CHAT ENGINE ═══ */
+const marcusChat = (function(){
+  // ── Config ──
+  const GW_PORT = 18789;
+  const TOKEN = '312f7fb9f6518cfb7566b3278964e19d8318b9dfe687229c';
+  const SESSION = 'agent:main:main';
+  // Auto-detect gateway host: if loaded from Tailscale IP or localhost, use same host
+  // If loaded from Firebase HTTPS, try common Tailscale IP
+  const TAILSCALE_IP = '100.79.145.59';
+  const gwHost = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.match(/^100\./))
+    ? location.hostname : TAILSCALE_IP;
+  const WS_URL = `ws://${gwHost}:${GW_PORT}`;
+
+  // ── State ──
+  let ws = null, connected = false, panelOpen = false;
+  let messages = [], stream = null, runId = null, pending = {};
+  let seq = 0, connectTimer = null, reconnectTimer = null, backoff = 800;
+  let mixedContentWarned = false;
+
+  // ── Helpers ──
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+  function esc(s){ const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+  function fmtTime(ts){ const d=new Date(ts);return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); }
+  function $(id){ return document.getElementById(id); }
+
+  // ── Simple markdown ──
+  function renderMd(text){
+    if(!text) return '';
+    let h = esc(text);
+    // Code blocks
+    h = h.replace(/```(\w*)\n([\s\S]*?)```/g, function(m,lang,code){ return '<pre><code>'+code+'</code></pre>'; });
+    // Inline code
+    h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Bold
+    h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    return h;
+  }
+
+  // Extract text from message content
+  function extractText(msg){
+    if(!msg) return null;
+    if(typeof msg === 'string') return msg;
+    if(typeof msg.text === 'string') return msg.text;
+    if(Array.isArray(msg.content)){
+      return msg.content.filter(b=>b&&b.type==='text'&&b.text).map(b=>b.text).join('\n');
+    }
+    if(Array.isArray(msg)){
+      return msg.filter(b=>b&&b.type==='text'&&b.text).map(b=>b.text).join('\n');
+    }
+    return null;
+  }
+
+  // ── WebSocket ──
+  function connect(){
+    if(ws) return;
+    // Mixed content check
+    if(location.protocol === 'https:' && !mixedContentWarned){
+      mixedContentWarned = true;
+      setStatus('connecting','CONNECTING...');
+    }
+    try { ws = new WebSocket(WS_URL); } catch(e){
+      setStatus('offline','NO GATEWAY');
+      showError('Cannot connect: mixed content (HTTPS→WS blocked). Access via http://'+TAILSCALE_IP+':8080');
+      return;
+    }
+    setStatus('connecting','CONNECTING...');
+    ws.onopen = function(){
+      connectTimer = setTimeout(sendConnect, 600);
+    };
+    ws.onmessage = function(ev){
+      try{ handleMsg(JSON.parse(ev.data)); }catch(e){}
+    };
+    ws.onclose = function(ev){
+      ws = null; connected = false;
+      setStatus('offline','DISCONNECTED');
+      if(connectTimer){ clearTimeout(connectTimer); connectTimer=null; }
+      if(!panelOpen) return;
+      reconnectTimer = setTimeout(function(){ connect(); }, backoff);
+      backoff = Math.min(backoff*1.5, 12000);
+    };
+    ws.onerror = function(){};
+  }
+
+  function sendConnect(){
+    connectTimer = null;
+    request('connect',{
+      minProtocol:3, maxProtocol:3,
+      client:{id:'openclaw-control-ui',version:'1.0',platform:'web',mode:'webchat',instanceId:uid()},
+      role:'operator', scopes:['operator.admin'], caps:[],
+      auth:{token:TOKEN}
+    }).then(function(hello){
+      connected = true; backoff = 800;
+      setStatus('online','ONLINE');
+      loadHistory();
+    }).catch(function(e){
+      setStatus('offline','AUTH FAILED');
+      showError('Connect failed: '+e.message);
+    });
+  }
+
+  function request(method, params){
+    return new Promise(function(resolve,reject){
+      if(!ws||ws.readyState!==1) return reject(new Error('not connected'));
+      const id = uid();
+      const msg = {type:'req',id:id,method:method,params:params||{}};
+      pending[id] = {resolve:resolve,reject:reject};
+      ws.send(JSON.stringify(msg));
+      setTimeout(function(){ if(pending[id]){ delete pending[id]; reject(new Error('timeout')); }}, 30000);
+    });
+  }
+
+  function handleMsg(data){
+    if(data.type==='res'){
+      const p = pending[data.id];
+      if(!p) return;
+      delete pending[data.id];
+      if(data.ok) p.resolve(data.payload);
+      else p.reject(new Error(data.error?.message||'request failed'));
+      return;
+    }
+    if(data.type==='event'){
+      if(data.event==='connect.challenge'){
+        // Got challenge nonce - reconnect with it (simplified: just send connect)
+        if(connectTimer) clearTimeout(connectTimer);
+        sendConnect();
+        return;
+      }
+      if(data.event==='chat') handleChatEvent(data.payload);
+    }
+  }
+
+  function handleChatEvent(p){
+    if(!p || p.sessionKey !== SESSION) return;
+    if(p.state==='delta'){
+      const txt = extractText(p.message);
+      if(typeof txt === 'string'){
+        stream = txt;
+        renderStream();
+      }
+    } else if(p.state==='final'){
+      stream = null; runId = null;
+      loadHistory();
+    } else if(p.state==='aborted' || p.state==='error'){
+      stream = null; runId = null;
+      if(p.state==='error') showError(p.errorMessage||'Chat error');
+      renderMessages();
+    }
+  }
+
+  // ── Chat Actions ──
+  function loadHistory(){
+    if(!connected) return;
+    request('chat.history',{sessionKey:SESSION,limit:100}).then(function(res){
+      messages = (res.messages||[]).map(function(m){
+        return {role:m.role,text:extractText(m)||'',ts:m.timestamp||Date.now()};
+      });
+      renderMessages();
+      scrollBottom();
+    }).catch(function(){});
+  }
+
+  function sendMessage(text){
+    if(!text.trim()||!connected) return;
+    const idKey = uid();
+    messages.push({role:'user',text:text.trim(),ts:Date.now()});
+    runId = idKey;
+    stream = '';
+    renderMessages();
+    scrollBottom();
+    request('chat.send',{
+      sessionKey:SESSION, message:text.trim(), deliver:false, idempotencyKey:idKey
+    }).catch(function(e){
+      showError('Send failed: '+e.message);
+      runId = null; stream = null;
+      renderMessages();
+    });
+  }
+
+  // ── UI ──
+  function setStatus(cls,text){
+    const el = $('mp-status');
+    if(el){ el.className='mp-status '+cls; el.textContent=text; }
+  }
+
+  function showError(msg){
+    const box = $('mp-messages');
+    if(!box) return;
+    // Remove old errors
+    box.querySelectorAll('.mp-error').forEach(function(e){e.remove();});
+    const div = document.createElement('div');
+    div.className='mp-error';
+    div.textContent=msg;
+    box.appendChild(div);
+    setTimeout(function(){ if(div.parentNode) div.remove(); }, 8000);
+  }
+
+  function renderMessages(){
+    const box = $('mp-messages');
+    if(!box) return;
+    // Preserve errors
+    const errors = box.querySelectorAll('.mp-error');
+    if(messages.length===0 && !stream){
+      box.innerHTML='<div class="mp-empty"><div class="mp-empty-icon">🤖</div><div class="mp-empty-text">Chat with Marcus</div></div>';
+      errors.forEach(function(e){box.appendChild(e);});
+      return;
+    }
+    let html = '';
+    messages.forEach(function(m){
+      if(m.role==='user'||m.role==='assistant'){
+        html += '<div class="mp-msg '+m.role+'">';
+        html += '<div><div class="mp-bubble">'+renderMd(m.text)+'</div>';
+        html += '<div class="mp-time">'+fmtTime(m.ts)+'</div></div></div>';
+      }
+    });
+    box.innerHTML = html;
+    if(stream!==null) renderStream();
+    errors.forEach(function(e){box.appendChild(e);});
+    scrollBottom();
+  }
+
+  function renderStream(){
+    const box = $('mp-messages');
+    if(!box) return;
+    let el = box.querySelector('.mp-stream');
+    if(stream===null||stream===undefined){
+      if(el) el.remove();
+      return;
+    }
+    if(!el){
+      el = document.createElement('div');
+      el.className='mp-stream mp-msg assistant';
+      el.innerHTML='<div><div class="mp-bubble"></div></div>';
+      box.appendChild(el);
+    }
+    const bubble = el.querySelector('.mp-bubble');
+    if(bubble){
+      if(stream===''){
+        bubble.innerHTML='<div class="mp-typing"><span></span><span></span><span></span></div>';
+      } else {
+        bubble.innerHTML = renderMd(stream);
+      }
+    }
+    scrollBottom();
+  }
+
+  function scrollBottom(){
+    const box = $('mp-messages');
+    if(box) requestAnimationFrame(function(){ box.scrollTop = box.scrollHeight; });
+  }
+
+  function autoGrow(el){
+    el.style.height='auto';
+    el.style.height=Math.min(el.scrollHeight,120)+'px';
+  }
+
+  // ── Public API ──
+  return {
+    toggle: function(){
+      panelOpen = !panelOpen;
+      const panel = $('marcus-panel');
+      const fab = $('marcus-fab');
+      if(panel) panel.classList.toggle('open',panelOpen);
+      if(fab) fab.classList.toggle('has-panel',panelOpen);
+      if(panelOpen){
+        if(!ws) connect();
+        setTimeout(function(){
+          const input = $('mp-input');
+          if(input) input.focus();
+          scrollBottom();
+        }, 300);
+      }
+    },
+    send: function(){
+      const input = $('mp-input');
+      if(!input) return;
+      const text = input.value;
+      if(!text.trim()) return;
+      input.value='';
+      input.style.height='auto';
+      sendMessage(text);
+    },
+    onKey: function(e){
+      if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault();
+        this.send();
+      }
+    },
+    autoGrow: autoGrow
+  };
+})();
+
+// Auto-connect if on local/Tailscale network
+if(location.protocol !== 'https:' || location.hostname.match(/^100\./)){
+  // Pre-connect for faster first chat
+  setTimeout(function(){ if(!document.getElementById('marcus-panel').classList.contains('open')){ /* lazy */ }}, 2000);
+}
+
+</script>
+</body>
+</html>

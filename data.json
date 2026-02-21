@@ -1,0 +1,90 @@
+{
+  "generated": "2026-02-18T06:30:23.324185",
+  "today": "Wednesday, February 18, 2026",
+  "dayOfYear": 49,
+  "yearProgress": 13,
+  "timeOfDay": "morning",
+  "schedule": [
+    {
+      "title": "ACIM 365 Days",
+      "time": "5:15 AM",
+      "endTime": "5:30 AM",
+      "cal": "Spiritual",
+      "color": "#A78BFA",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Take Addy To School",
+      "time": "7:00 AM",
+      "endTime": "8:00 AM",
+      "cal": "Family",
+      "color": "#F59E0B",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Adi/Jason Weekly Sync",
+      "time": "8:15 AM",
+      "endTime": "9:00 AM",
+      "cal": "SkyHawk",
+      "color": "#3B82F6",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Leadership Weekly",
+      "time": "9:00 AM",
+      "endTime": "10:00 AM",
+      "cal": "SkyHawk",
+      "color": "#3B82F6",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Noam/Jason Weekly",
+      "time": "9:00 AM",
+      "endTime": "9:30 AM",
+      "cal": "SkyHawk",
+      "color": "#3B82F6",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Scott Gaines / Jason Monthly Placeholder",
+      "time": "11:00 AM",
+      "endTime": "11:30 AM",
+      "cal": "Work",
+      "color": "#8B5CF6",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Dallas/Jason AI Lunch",
+      "time": "12:00 PM",
+      "endTime": "1:00 PM",
+      "cal": "Work",
+      "color": "#8B5CF6",
+      "location": "Shack Breakfast & Lunch, 731 S Lindbergh Blvd, Frontenac, MO 63131, USA",
+      "now": false
+    },
+    {
+      "title": "Gregory Mosca - 30 minutes meeting",
+      "time": "1:30 PM",
+      "endTime": "2:00 PM",
+      "cal": "SkyHawk",
+      "color": "#3B82F6",
+      "location": "",
+      "now": false
+    },
+    {
+      "title": "Meeting at Bockmans",
+      "time": "8:00 PM",
+      "endTime": "10:30 PM",
+      "cal": "Family",
+      "color": "#F59E0B",
+      "location": "",
+      "now": false
+    }
+  ]
+}
