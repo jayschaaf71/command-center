@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-02-20T23:30:40Z",
+  "source": "ynab-api-v1",
+  "status": "ok",
+  "budgets": [
+    {
+      "id": "ee3f38f5-7c67-48bd-8007-492c6b61f1df",
+      "name": "Schaaf Family Budget",
+      "currency_format": {
+        "iso_code": "USD",
+        "example_format": "123,456.78",
+        "decimal_digits": 2,
+        "decimal_separator": ".",
+        "symbol_first": true,
+        "group_separator": ",",
+        "currency_symbol": "$",
+        "display_symbol": true
+      }
+    }
+  ],
+  "insights": {
+    "total_accounts": 18,
+    "net_worth": 151227.47,
+    "top_categories": [
+      {
+        "name": "Uncategorized",
+        "budgeted": 0,
+        "activity": 2148.98,
+        "balance": 2148.98
+      },
+      {
+        "name": "Chase Southwest Card",
+        "budgeted": 0,
+        "activity": 827,
+        "balance": 827
+      },
+      {
+        "name": "CREDIT CARD",
+        "budgeted": 0,
+        "activity": 65,
+        "balance": 65
+      },
+      {
+        "name": "Chase United Card",
+        "budgeted": 0,
+        "activity": 54.89,
+        "balance": 54.89
+      },
+      {
+        "name": "❗️Stuff I forgot to budget for",
+        "budgeted": 0,
+        "activity": 0,
+        "balance": 0
+      },
+      {
+        "name": "🌳 YNAB subscription",
+        "budgeted": 0,
+        "activity": 0,
+        "balance": 0
+      },
+      {
+        "name": "👥 Their spending money",
+        "budgeted": 0,
+        "activity": 0,
+        "balance": 0
+      },
+      {
+        "name": "👥 My spending money",
+        "budgeted": 0,
+        "activity": 0,
+        "balance": 0
+      }
+    ]
+  }
+}

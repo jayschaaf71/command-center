@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-02-20T23:30:40Z",
+  "ventures": [
+    {
+      "name": "SymAssist",
+      "stage": "MVP Development — dev team in Argentina (Brantley). Expected completion: 3-4 months.",
+      "ninety_day_goal": "Continue MVP development on schedule. Build GTM foundation so when MVP is ready, there's immediate market traction.",
+      "current_priority": "2. Begin market research and competitive intelligence",
+      "priority_tier": 2
+    },
+    {
+      "name": "EpicLife",
+      "stage": "MVP Development — dev team in India (Oodles).",
+      "ninety_day_goal": "Continue MVP development. Define the GTM strategy. Explore the OpenClaw convergence opportunity.",
+      "current_priority": "2. Refine the product vision: onboarding flow, habit engine, vision→plan→daily execution framework",
+      "priority_tier": 2
+    },
+    {
+      "name": "Black Knight Aura",
+      "stage": "Early Development — being built by Oodles (India) alongside My Epic Life.",
+      "ninety_day_goal": "Continue development. Define the curriculum/toolkit structure. Begin building the AI knowledge base that powers the coaching engine.",
+      "current_priority": "2. Define the core curriculum: What does the AI coach teach first?",
+      "priority_tier": 2
+    },
+    {
+      "name": "FrontDesk",
+      "stage": "Near Launch — app nearing completion, going to market in coming weeks.",
+      "ninety_day_goal": "Launch the product. Onboard first paying customers. Establish product-market fit.",
+      "current_priority": "2. Complete QA and testing of call flows",
+      "priority_tier": 3
+    },
+    {
+      "name": "STOIC",
+      "stage": "Operational — seeking growth opportunities. Sells via Shopify, eBay, and Chrono24.",
+      "ninety_day_goal": "Automate operations so STOIC runs with <15 min/day of Jason's time. Maintain/grow sales presence.",
+      "current_priority": "2. Ensure Shopify store is updated and optimized",
+      "priority_tier": 3
+    },
+    {
+      "name": "Cyber Connector",
+      "stage": "Concept — idea is framed up, needs a plan built out.",
+      "ninety_day_goal": "Build the business plan, competitive analysis, and initial taxonomy. Determine go/no-go.",
+      "current_priority": "2. Draft the \"unbiased algorithm principles\" document",
+      "priority_tier": 4
+    },
+    {
+      "name": "BKAG",
+      "stage": "Early Formation — founding council established, structure defined, platform being set up on Circle.so.",
+      "ninety_day_goal": "Finalize the platform on Circle.so. Recruit initial founding council members. Host first quarterly event.",
+      "current_priority": "2. Complete Circle.so platform setup",
+      "priority_tier": 4
+    },
+    {
+      "name": "Network Group",
+      "stage": "Concept — general idea formed, not yet a formal entity. Lower priority.",
+      "ninety_day_goal": "Define the concept clearly enough to decide: launch separately, merge with BKAG, or table for later.",
+      "current_priority": "2. Draft founding value proposition",
+      "priority_tier": 4
+    }
+  ]
+}

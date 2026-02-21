@@ -1,0 +1,7 @@
+{
+  "generated_at": "2026-02-20T23:30:40Z",
+  "source": "salesforce-cli",
+  "status": "degraded",
+  "reason": "query_failed_or_auth_unavailable",
+  "opportunities": []
+}

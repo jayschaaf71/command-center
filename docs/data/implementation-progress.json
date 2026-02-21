@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-02-20T23:30:40Z",
+  "items": [
+    {
+      "name": "Dashboard shell",
+      "status": "complete",
+      "detail": "Single-page responsive dark UI implemented."
+    },
+    {
+      "name": "System health telemetry",
+      "status": "complete",
+      "detail": "OpenClaw routing and token usage wired from local CLI/config."
+    },
+    {
+      "name": "SkyHawk pipeline",
+      "status": "in_progress",
+      "detail": "Salesforce CLI query wired with graceful fallback when auth/network unavailable."
+    },
+    {
+      "name": "Venture tracker",
+      "status": "complete",
+      "detail": "Eight venture context cards ingested from MarcusOS memory."
+    },
+    {
+      "name": "Finance tab",
+      "status": "in_progress",
+      "detail": "YNAB key ingestion wired; live API fetch depends on outbound network."
+    },
+    {
+      "name": "GitHub Pages deploy",
+      "status": "pending",
+      "detail": "Workflow files ready; publish requires GitHub auth/network from this environment."
+    }
+  ]
+}
