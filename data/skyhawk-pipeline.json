@@ -1,7 +1,5 @@
 {
-  "generated_at": "2026-02-20T23:30:40Z",
-  "source": "salesforce-cli",
-  "status": "degraded",
-  "reason": "query_failed_or_auth_unavailable",
-  "opportunities": []
+  "generated_at": "2026-03-04T20:58:31Z",
+  "status": "limited_access",
+  "message": "Salesforce data unavailable during remote build"
 }

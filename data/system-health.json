@@ -1,25 +1,606 @@
 {
-  "generated_at": "2026-02-20T23:30:40Z",
-  "openclaw": {
-    "status": "online",
-    "mode": "local",
-    "bind": "loopback",
-    "port": 18789
+  "linkChannel": {
+    "id": "whatsapp",
+    "label": "WhatsApp",
+    "linked": true,
+    "authAgeMs": 375760.8278808594
   },
-  "model_routing": {
-    "primary": "anthropic/claude-sonnet-4-20250514",
-    "fallbacks": [
-      "openai/gpt-4.1-mini",
-      "deepseek/deepseek-v3.2"
+  "heartbeat": {
+    "defaultAgentId": "main",
+    "agents": [
+      {
+        "agentId": "main",
+        "enabled": true,
+        "every": "30m",
+        "everyMs": 1800000
+      }
+    ]
+  },
+  "channelSummary": [
+    "Telegram: configured",
+    "  - default (token:config)",
+    "WhatsApp: linked +16362627598 auth 6m ago",
+    "  - default (dm:pairing, allow:+13144205637)"
+  ],
+  "queuedSystemEvents": [],
+  "sessions": {
+    "paths": [
+      "/Users/moltbot/.openclaw/agents/main/sessions/sessions.json"
     ],
-    "heartbeat_model": "anthropic/claude-haiku-4-5-20251001",
-    "subagent_model": "anthropic/claude-haiku-4-5-20251001"
+    "count": 343,
+    "defaults": {
+      "model": "claude-sonnet-4-20250514",
+      "contextTokens": 160000
+    },
+    "recent": [
+      {
+        "agentId": "main",
+        "key": "agent:main:whatsapp:direct:+13144205637",
+        "kind": "direct",
+        "sessionId": "aa619955-ad7a-418d-8eaa-b3e40825fe4f",
+        "updatedAt": 1772657869432,
+        "age": 46058,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 147,
+        "outputTokens": 2890,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:aa619955-ad7a-418d-8eaa-b3e40825fe4f"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:main",
+        "kind": "direct",
+        "sessionId": "59a0cd39-3e1b-4f85-aed9-a23239d0d83a",
+        "updatedAt": 1772657869020,
+        "age": 46470,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 23,
+        "outputTokens": 288,
+        "totalTokens": 73266,
+        "remainingTokens": 86734,
+        "percentUsed": 46,
+        "model": "claude-haiku-4-5-20251001",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:59a0cd39-3e1b-4f85-aed9-a23239d0d83a"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31",
+        "kind": "direct",
+        "sessionId": "09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+        "updatedAt": 1772656200073,
+        "age": 1715417,
+        "systemSent": true,
+        "inputTokens": 107,
+        "outputTokens": 1748,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:09553210-b0cd-4f0a-b400-2c56e2bf0e34"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31:run:09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+        "kind": "direct",
+        "sessionId": "09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+        "updatedAt": 1772656200073,
+        "age": 1715417,
+        "systemSent": true,
+        "inputTokens": 107,
+        "outputTokens": 1748,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:09553210-b0cd-4f0a-b400-2c56e2bf0e34"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31:run:604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1",
+        "kind": "direct",
+        "sessionId": "604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1",
+        "updatedAt": 1772654552671,
+        "age": 3362819,
+        "systemSent": true,
+        "inputTokens": 105,
+        "outputTokens": 1691,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:telegram:direct:8531503567",
+        "kind": "direct",
+        "sessionId": "bc9a693f-e7a7-44f4-b8dc-dfdd81c494f3",
+        "updatedAt": 1772654510671,
+        "age": 3404819,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 130,
+        "outputTokens": 2178,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:bc9a693f-e7a7-44f4-b8dc-dfdd81c494f3"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:d5a52272-756b-42a8-9afa-4372e8c26441",
+        "kind": "direct",
+        "sessionId": "80105236-113b-45a0-be1d-3bffb80e1b79",
+        "updatedAt": 1772654504862,
+        "age": 3410628,
+        "systemSent": true,
+        "inputTokens": 127,
+        "outputTokens": 1817,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:80105236-113b-45a0-be1d-3bffb80e1b79"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:d5a52272-756b-42a8-9afa-4372e8c26441:run:80105236-113b-45a0-be1d-3bffb80e1b79",
+        "kind": "direct",
+        "sessionId": "80105236-113b-45a0-be1d-3bffb80e1b79",
+        "updatedAt": 1772654504862,
+        "age": 3410628,
+        "systemSent": true,
+        "inputTokens": 127,
+        "outputTokens": 1817,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:80105236-113b-45a0-be1d-3bffb80e1b79"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:eeb47a0a-11cd-4156-a6b4-5fbd63c611d5",
+        "kind": "direct",
+        "sessionId": "ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+        "updatedAt": 1772654400082,
+        "age": 3515408,
+        "systemSent": true,
+        "inputTokens": 184,
+        "outputTokens": 3549,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:eeb47a0a-11cd-4156-a6b4-5fbd63c611d5:run:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+        "kind": "direct",
+        "sessionId": "ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+        "updatedAt": 1772654400082,
+        "age": 3515408,
+        "systemSent": true,
+        "inputTokens": 184,
+        "outputTokens": 3549,
+        "totalTokens": 160000,
+        "remainingTokens": 0,
+        "percentUsed": 100,
+        "model": "claude-sonnet-4-20250514",
+        "contextTokens": 160000,
+        "flags": [
+          "system",
+          "id:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629"
+        ]
+      }
+    ],
+    "byAgent": [
+      {
+        "agentId": "main",
+        "path": "/Users/moltbot/.openclaw/agents/main/sessions/sessions.json",
+        "count": 343,
+        "recent": [
+          {
+            "agentId": "main",
+            "key": "agent:main:whatsapp:direct:+13144205637",
+            "kind": "direct",
+            "sessionId": "aa619955-ad7a-418d-8eaa-b3e40825fe4f",
+            "updatedAt": 1772657869432,
+            "age": 46058,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 147,
+            "outputTokens": 2890,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:aa619955-ad7a-418d-8eaa-b3e40825fe4f"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:main",
+            "kind": "direct",
+            "sessionId": "59a0cd39-3e1b-4f85-aed9-a23239d0d83a",
+            "updatedAt": 1772657869020,
+            "age": 46470,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 23,
+            "outputTokens": 288,
+            "totalTokens": 73266,
+            "remainingTokens": 86734,
+            "percentUsed": 46,
+            "model": "claude-haiku-4-5-20251001",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:59a0cd39-3e1b-4f85-aed9-a23239d0d83a"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31",
+            "kind": "direct",
+            "sessionId": "09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+            "updatedAt": 1772656200073,
+            "age": 1715417,
+            "systemSent": true,
+            "inputTokens": 107,
+            "outputTokens": 1748,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:09553210-b0cd-4f0a-b400-2c56e2bf0e34"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31:run:09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+            "kind": "direct",
+            "sessionId": "09553210-b0cd-4f0a-b400-2c56e2bf0e34",
+            "updatedAt": 1772656200073,
+            "age": 1715417,
+            "systemSent": true,
+            "inputTokens": 107,
+            "outputTokens": 1748,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:09553210-b0cd-4f0a-b400-2c56e2bf0e34"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:77cf2974-6e3e-4b36-84cf-dacafc1d3a31:run:604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1",
+            "kind": "direct",
+            "sessionId": "604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1",
+            "updatedAt": 1772654552671,
+            "age": 3362819,
+            "systemSent": true,
+            "inputTokens": 105,
+            "outputTokens": 1691,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:604f3cf7-8a9d-4e08-80e0-5d5817d6f2a1"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:telegram:direct:8531503567",
+            "kind": "direct",
+            "sessionId": "bc9a693f-e7a7-44f4-b8dc-dfdd81c494f3",
+            "updatedAt": 1772654510671,
+            "age": 3404819,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 130,
+            "outputTokens": 2178,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:bc9a693f-e7a7-44f4-b8dc-dfdd81c494f3"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:d5a52272-756b-42a8-9afa-4372e8c26441",
+            "kind": "direct",
+            "sessionId": "80105236-113b-45a0-be1d-3bffb80e1b79",
+            "updatedAt": 1772654504862,
+            "age": 3410628,
+            "systemSent": true,
+            "inputTokens": 127,
+            "outputTokens": 1817,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:80105236-113b-45a0-be1d-3bffb80e1b79"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:d5a52272-756b-42a8-9afa-4372e8c26441:run:80105236-113b-45a0-be1d-3bffb80e1b79",
+            "kind": "direct",
+            "sessionId": "80105236-113b-45a0-be1d-3bffb80e1b79",
+            "updatedAt": 1772654504862,
+            "age": 3410628,
+            "systemSent": true,
+            "inputTokens": 127,
+            "outputTokens": 1817,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:80105236-113b-45a0-be1d-3bffb80e1b79"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:eeb47a0a-11cd-4156-a6b4-5fbd63c611d5",
+            "kind": "direct",
+            "sessionId": "ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+            "updatedAt": 1772654400082,
+            "age": 3515408,
+            "systemSent": true,
+            "inputTokens": 184,
+            "outputTokens": 3549,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:eeb47a0a-11cd-4156-a6b4-5fbd63c611d5:run:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+            "kind": "direct",
+            "sessionId": "ef4db3ba-fa1d-4fec-8b60-ad2b891f9629",
+            "updatedAt": 1772654400082,
+            "age": 3515408,
+            "systemSent": true,
+            "inputTokens": 184,
+            "outputTokens": 3549,
+            "totalTokens": 160000,
+            "remainingTokens": 0,
+            "percentUsed": 100,
+            "model": "claude-sonnet-4-20250514",
+            "contextTokens": 160000,
+            "flags": [
+              "system",
+              "id:ef4db3ba-fa1d-4fec-8b60-ad2b891f9629"
+            ]
+          }
+        ]
+      }
+    ]
   },
-  "token_spend": {
-    "recent_sessions": 10,
-    "input_tokens_sum": 1065,
-    "output_tokens_sum": 25235,
-    "total_tokens_sum": 1281754,
-    "max_percent_used": 100
+  "os": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "release": "24.6.0",
+    "label": "macos 15.7.3 (arm64)"
+  },
+  "update": {
+    "root": "/opt/homebrew/lib/node_modules/openclaw",
+    "installKind": "package",
+    "packageManager": "pnpm",
+    "deps": {
+      "manager": "pnpm",
+      "status": "unknown",
+      "lockfilePath": "/opt/homebrew/lib/node_modules/openclaw/pnpm-lock.yaml",
+      "markerPath": "/opt/homebrew/lib/node_modules/openclaw/node_modules/.modules.yaml",
+      "reason": "lockfile missing"
+    },
+    "registry": {
+      "latestVersion": "2026.3.2"
+    }
+  },
+  "updateChannel": "stable",
+  "updateChannelSource": "default",
+  "memory": {
+    "agentId": "main",
+    "backend": "builtin",
+    "files": 46,
+    "chunks": 89,
+    "dirty": true,
+    "workspaceDir": "/Users/moltbot/.openclaw/workspace",
+    "dbPath": "/Users/moltbot/.openclaw/memory/main.sqlite",
+    "provider": "openai",
+    "model": "text-embedding-3-small",
+    "requestedProvider": "auto",
+    "sources": [
+      "memory"
+    ],
+    "extraPaths": [],
+    "sourceCounts": [
+      {
+        "source": "memory",
+        "files": 46,
+        "chunks": 89
+      }
+    ],
+    "cache": {
+      "enabled": true,
+      "entries": 246
+    },
+    "fts": {
+      "enabled": true,
+      "available": true
+    },
+    "vector": {
+      "enabled": true,
+      "available": true,
+      "extensionPath": "/opt/homebrew/lib/node_modules/openclaw/node_modules/sqlite-vec-darwin-arm64/vec0.dylib",
+      "dims": 1536
+    },
+    "batch": {
+      "enabled": true,
+      "failures": 0,
+      "limit": 2,
+      "wait": true,
+      "concurrency": 2,
+      "pollIntervalMs": 2000,
+      "timeoutMs": 3600000
+    }
+  },
+  "memoryPlugin": {
+    "enabled": true,
+    "slot": "memory-core"
+  },
+  "gateway": {
+    "mode": "local",
+    "url": "ws://127.0.0.1:18789",
+    "urlSource": "local loopback",
+    "misconfigured": false,
+    "reachable": true,
+    "connectLatencyMs": 173,
+    "self": {
+      "host": "AutomationsMini",
+      "ip": "192.168.50.70",
+      "version": "unknown",
+      "platform": "macos 15.7.3"
+    },
+    "error": null
+  },
+  "gatewayService": {
+    "label": "LaunchAgent",
+    "installed": true,
+    "loadedText": "loaded",
+    "runtimeShort": "running (pid 62244)"
+  },
+  "nodeService": {
+    "label": "LaunchAgent",
+    "installed": false,
+    "loadedText": "not loaded",
+    "runtimeShort": "unknown"
+  },
+  "agents": {
+    "defaultId": "main",
+    "agents": [
+      {
+        "id": "main",
+        "workspaceDir": "/Users/moltbot/.openclaw/workspace",
+        "bootstrapPending": true,
+        "sessionsPath": "/Users/moltbot/.openclaw/agents/main/sessions/sessions.json",
+        "sessionsCount": 343,
+        "lastUpdatedAt": 1772657869432,
+        "lastActiveAgeMs": 45306
+      }
+    ],
+    "totalSessions": 343,
+    "bootstrapPendingCount": 1
+  },
+  "securityAudit": {
+    "ts": 1772657915506,
+    "summary": {
+      "critical": 1,
+      "warn": 2,
+      "info": 1
+    },
+    "findings": [
+      {
+        "checkId": "summary.attack_surface",
+        "severity": "info",
+        "title": "Attack surface summary",
+        "detail": "groups: open=0, allowlist=2\ntools.elevated: enabled\nhooks: disabled\nbrowser control: enabled"
+      },
+      {
+        "checkId": "gateway.trusted_proxies_missing",
+        "severity": "warn",
+        "title": "Reverse proxy headers are not trusted",
+        "detail": "gateway.bind is loopback and gateway.trustedProxies is empty. If you expose the Control UI through a reverse proxy, configure trusted proxies so local-client checks cannot be spoofed.",
+        "remediation": "Set gateway.trustedProxies to your proxy IPs or keep the Control UI local-only."
+      },
+      {
+        "checkId": "gateway.control_ui.insecure_auth",
+        "severity": "critical",
+        "title": "Control UI allows insecure HTTP auth",
+        "detail": "gateway.controlUi.allowInsecureAuth=true allows token-only auth over HTTP and skips device identity.",
+        "remediation": "Disable it or switch to HTTPS (Tailscale Serve) or localhost."
+      },
+      {
+        "checkId": "models.weak_tier",
+        "severity": "warn",
+        "title": "Some configured models are below recommended tiers",
+        "detail": "Smaller/older models are generally more susceptible to prompt injection and tool misuse.\n- anthropic/claude-sonnet-4-20250514 (Below Claude 4.5) @ agents.defaults.model.primary\n- openai/gpt-4.1-mini (Below GPT-5 family) @ agents.defaults.model.fallbacks",
+        "remediation": "Use the latest, top-tier model for any bot with tools or untrusted inboxes. Avoid Haiku tiers; prefer GPT-5+ and Claude 4.5+."
+      }
+    ]
   }
 }
